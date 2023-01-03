@@ -1,12 +1,10 @@
 from Die import Die
 from Game import Game
 
-def main():
+def run_trials(number_of_players, number_of_trials=5000):
     basic_die = Die(1,1,1,3)
-    number_of_players = 10
     basic_game = Game(number_of_players, basic_die, 3)
     winners = {}
-    number_of_trials=100000
     for n in range(0, number_of_trials):
         while basic_game.winner is None:
             basic_game.play_turn()
@@ -17,6 +15,8 @@ def main():
         else:
             winners[winner_name] = 1
         basic_game = Game(number_of_players, basic_die, 3)
+        if n%1000==0:
+            print(n)
 
     x_axis = []
     y_axis = []
@@ -27,11 +27,10 @@ def main():
         x_axis.append(i+1)
         percentages.append(winners[str(i)]/number_of_trials)
 
-    print(x_axis)
-    print(y_axis)
-    print(percentages)
+    return names, number_of_wins, percentage_of_wins
 
-
+def main():
+    run_trials(10)
 
 if __name__ == '__main__':
     main()

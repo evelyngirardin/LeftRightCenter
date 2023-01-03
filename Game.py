@@ -11,6 +11,7 @@ class Game:
         self.total_money = starting_money*number_of_players
         self.winner = None
         self.number_of_players = number_of_players
+        self.current_players = number_of_players
         self.current_turn = 0
         self.turn_order = []
 
@@ -42,24 +43,28 @@ class Game:
 
             for roll in rolls:
                 if roll == "L":
+                    if left_player.money == 0:
+                        self.current_players+=1
                     left_player.money += 1
                     current_player.money -= 1
                 elif roll == "R":
+                    if right_player.money == 0:
+                        self.current_players+=1
                     right_player.money += 1
                     current_player.money -= 1
                 elif roll == "C":
                     current_player.money -= 1
                     self.total_money -= 1
 
+            if current_player.money == 0:
+                self.current_players-=1
 
+        
         self.total_turns += 1
         self.current_turn = self.total_turns%self.number_of_players
 
-        moneyless_players = 0
-        for player in self.turn_order:
-            if player.money == 0:
-                moneyless_players+=1
-        if moneyless_players == self.number_of_players-1:
+       
+        if self.current_players == 1:
             for player in self.turn_order:
                 if player.money != 0:
                     self.winner = player
